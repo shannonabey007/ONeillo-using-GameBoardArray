@@ -13,6 +13,7 @@ namespace ONeillo_GameBoardArray
         const int WhitePiece = 1;
         const int BlackPiece = 0;
 
+
         int currentPlayer = BlackPiece;
         int oppositePlayer = WhitePiece;
 
@@ -23,28 +24,12 @@ namespace ONeillo_GameBoardArray
         public GameBoardForm()
         {
             InitializeComponent();
-            /*
-            MenuStrip menuStrip = new MenuStrip(); // creates the menu strip
-            ToolStripMenuItem fileMenuItem = new ToolStripMenuItem("File"); // adds the 'file' option to the menu strip
-            ToolStripMenuItem optionsMenuItem = new ToolStripMenuItem("Options"); // adds the 'options' option to the menu strip
-            menuStrip.Items.Add(fileMenuItem); // adds all the drop downs to the 'file' option to the menu strip
-            menuStrip.Items.Add(optionsMenuItem); // ass all the drop downs to the 'options' option to the menu strip 
-            this.Controls.Add(menuStrip);
-
-            // drop downs for the file option
-            fileMenuItem.DropDownItems.Add("New Game");
-            fileMenuItem.DropDownItems.Add("Exit Game");
-
-            // drop downs for options option
-            optionsMenuItem.DropDownItems.Add("Settings");
-            optionsMenuItem.DropDownItems.Add("Help");
-
-            */
 
             Point topLC = new Point(100, 100);
             Point bottomRC = new Point(100, 150);
 
             gameBoardData = this.CreateBoardArray();
+
 
             try
             {
@@ -59,11 +44,12 @@ namespace ONeillo_GameBoardArray
 
         }
 
-
-
         // creates the board array and setting all rows and columns to empty board pieces - green = 10
 
-
+        /// <summary>
+        /// creates the board array and populates it with blank pieces and also sets the board up in starting positions
+        /// </summary>
+        /// <returns></returns>
         private int[,] CreateBoardArray()
         {
             int[,] boardArray = new int[num_BoardRows, num_BoardColumns];
@@ -85,7 +71,8 @@ namespace ONeillo_GameBoardArray
 
             return boardArray;
         }
-
+        
+        // swaps the player each time a move is made
         private void SwapPlayPieces()
         {
             int temp = currentPlayer;
@@ -93,18 +80,17 @@ namespace ONeillo_GameBoardArray
             oppositePlayer = temp;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
         private void GameTileClicked(object sender, EventArgs e)
         {
             int clickedRow = _gameBoardGui.GetCurrentRowIndex(sender);
             int clickedColumn = _gameBoardGui.GetCurrentColumnIndex(sender);
 
-            
+
             if (ValidMove(clickedRow, clickedColumn, currentPlayer, oppositePlayer))
             {
                 gameBoardData[clickedRow, clickedColumn] = currentPlayer; // applies the move 
@@ -119,10 +105,45 @@ namespace ONeillo_GameBoardArray
             }
             */
 
+            // shows the number of black pieces on the gui panel
+            int blackPieces = 0;
+
+            for (int row = 0; row < 8; row++) 
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    if (gameBoardData[row, col] == 0) // finds the black pieces on the board/ in the array
+                    {
+                        blackPieces++; // adds it all to the variable, incrementing the number each time a piece is found
+                        blackPieceCounter.Text = "x" + Convert.ToString(blackPieces); // displays it on the gui
+                    }
+                }
+            }
+
+            // shows the number of white pieces on the gui panel
+            int whitePieces = 0;
+
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    if (gameBoardData[row, col] == 1) // finds the white pieces on the board/ in the array
+                    {
+                        whitePieces++; // adds it all to the variable, incrementing the variable number each time a piece is found
+                        whitePieceCounter.Text = "x" + Convert.ToString(whitePieces); // displays it on the gui 
+                    }
+                }
+            }
+
+
+
+
         }
 
         /// <summary>
-        /// 
+        /// function for the game logic -
+        /// checks if there is a blank piece - if the tile isnt blank then the move is not valid
+        /// if the function finds the opposite players piece(s) then the current player pieces then the move is valid
         /// </summary>
         /// <param name="row"></param>
         /// <param name="col"></param>
@@ -139,32 +160,32 @@ namespace ONeillo_GameBoardArray
                 MessageBox.Show("Invalid Move: Tile Occupied");
                 return false;
             }
-
-            int[] checkStraight = { -1, -1, -1, 0, 0, 1, 1, 1 }; // these will be used to check the directions (incl diagonals) 
+            // these will be used to check the directions (incl diagonals) 
+            int[] checkRows = { -1, -1, -1, 0, 0, 1, 1, 1 };
             int[] checkHorizontal = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-            for (int i = 0; i < 8; i++) // i is anything between 0 and
+            for (int i = 0; i < 8; i++) // i is used to iterate over the tiles - i is anything between 0 and 8 
             {
-                int r = row + checkStraight[i];
-                int c = col + checkHorizontal[i];
+                int r = row + checkRows[i]; // checks the rows around the tile clicked
+                int c = col + checkHorizontal[i]; // checks the horizontal directions from the tile clicked
 
-                while (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns)
+                while (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns) // while the tile clicked is in the board 
                 {
-                    if (gameBoardData[r, c] == oppositePlayer)
+                    if (gameBoardData[r, c] == oppositePlayer) // if the opposite player pieces are found when iterating around the clicked tile
                     {
-                        r += checkStraight[i];
+                        r += checkRows[i];
                         c += checkHorizontal[i];
-                        if (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns && gameBoardData[r, c] == currentPlayer)
+                        if (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns && gameBoardData[r, c] == currentPlayer) // if the current player's piece is also found after find other players piece(s):
                         {
-                            MessageBox.Show("Valid Move");
-                            return true;
+                            return true; // the move is valid 
                         }
                     }
-                    else if (gameBoardData[r, c] == BlankPiece || gameBoardData[r, c] == currentPlayer)
+                    else if (gameBoardData[r, c] == BlankPiece || gameBoardData[r, c] == currentPlayer) // breaks if 
                     {
                         break;
                     }
                 }
+
             }
 
             MessageBox.Show("Invalid Move");
@@ -179,36 +200,39 @@ namespace ONeillo_GameBoardArray
         /// <param name="col"></param>
         /// <param name="currentPlayer"></param>
         /// <param name="oppositePlayer"></param>
+        /// 
+        // function to flip pieces once a valid move is made 
         private void FlipPieces(int row, int col, int currentPlayer, int oppositePlayer)
         {
-            int[] checkStraight = { -1, -1, -1, 0, 0, 1, 1, 1 }; // these will be used to check the directions (incl diagonals) 
+            // these will be used to check the directions (incl diagonals)
+            int[] checkRows = { -1, -1, -1, 0, 0, 1, 1, 1 };
             int[] checkHorizontal = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++) // i is used to iterate over the tiles - i is anything between 0 and 8 
             {
-                int r = row + checkStraight[i];
+                int r = row + checkRows[i];
                 int c = col + checkHorizontal[i];
 
-                List<Point> tilesToFlip = new List<Point>(); // To store tiles to be flipped
+                List<Point> tilesToFlip = new List<Point>(); // stores tiles to be flipped
 
                 while (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns)
                 {
                     if (gameBoardData[r, c] == oppositePlayer)
                     {
-                        tilesToFlip.Add(new Point(r, c));
-                        r += checkStraight[i];
+                        tilesToFlip.Add(new Point(r, c)); // iterates over opposite players pieces and stores them as points to be flipped
+                        r += checkRows[i];
                         c += checkHorizontal[i];
 
                         if (r >= 0 && r < num_BoardRows && c >= 0 && c < num_BoardColumns && gameBoardData[r, c] == currentPlayer)
                         {
-                            foreach (Point p in tilesToFlip)
+                            foreach (Point p in tilesToFlip) // flips all stored points 
                             {
-                                gameBoardData[p.X, p.Y] = currentPlayer;
+                                gameBoardData[p.X, p.Y] = currentPlayer; // to the current player's pieces 
                             }
                             break;
                         }
                     }
-                    else if (gameBoardData[r, c] == BlankPiece || gameBoardData[r, c] == currentPlayer)
+                    else if (gameBoardData[r, c] == BlankPiece || gameBoardData[r, c] == currentPlayer) // if there are blank pieces or current player pieces, does not flip them 
                     {
                         break;
                     }
@@ -216,6 +240,27 @@ namespace ONeillo_GameBoardArray
             }
         }
 
+
+        
+
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.Owner = this;
+            about.Show();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gameBoardData = this.CreateBoardArray();
+            _gameBoardGui.UpdateBoardGui(gameBoardData);
+        }
+
+        private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

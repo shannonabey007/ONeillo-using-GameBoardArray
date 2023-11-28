@@ -29,34 +29,43 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoardForm));
-            menuStrip1 = new MenuStrip();
+            menuStrip = new MenuStrip();
             menuToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
             saveGameToolStripMenuItem = new ToolStripMenuItem();
-            restartToolStripMenuItem = new ToolStripMenuItem();
             optionsToolStripMenuItem = new ToolStripMenuItem();
             informationPanelToolStripMenuItem = new ToolStripMenuItem();
             gameToSpeechToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem1 = new ToolStripMenuItem();
-            panel1 = new Panel();
-            label1 = new Label();
-            menuStrip1.SuspendLayout();
-            panel1.SuspendLayout();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            PlayerPanel = new Panel();
+            textBox1 = new TextBox();
+            player1Name = new TextBox();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
+            whitePieceCounter = new Label();
+            blackPieceCounter = new Label();
+            fileSystemWatcher1 = new FileSystemWatcher();
+            menuStrip.SuspendLayout();
+            PlayerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             SuspendLayout();
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            menuStrip1.ImageScalingSize = new Size(24, 24);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem1 });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(878, 33);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
+            menuStrip.ImageScalingSize = new Size(24, 24);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem1 });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(878, 33);
+            menuStrip.TabIndex = 0;
+            menuStrip.Text = "menuStrip1";
             // 
             // menuToolStripMenuItem
             // 
-            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, saveGameToolStripMenuItem, restartToolStripMenuItem });
+            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, saveGameToolStripMenuItem });
             menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             menuToolStripMenuItem.Size = new Size(74, 29);
             menuToolStripMenuItem.Text = "Game";
@@ -66,18 +75,14 @@
             newToolStripMenuItem.Name = "newToolStripMenuItem";
             newToolStripMenuItem.Size = new Size(207, 34);
             newToolStripMenuItem.Text = "New Game";
+            newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // saveGameToolStripMenuItem
             // 
             saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
             saveGameToolStripMenuItem.Size = new Size(207, 34);
             saveGameToolStripMenuItem.Text = "Save Game ";
-            // 
-            // restartToolStripMenuItem
-            // 
-            restartToolStripMenuItem.Name = "restartToolStripMenuItem";
-            restartToolStripMenuItem.Size = new Size(207, 34);
-            restartToolStripMenuItem.Text = "Re-start";
+            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
             // 
             // optionsToolStripMenuItem
             // 
@@ -100,28 +105,99 @@
             // 
             // helpToolStripMenuItem1
             // 
+            helpToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
             helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
             helpToolStripMenuItem1.Size = new Size(65, 29);
             helpToolStripMenuItem1.Text = "Help";
             // 
-            // panel1
+            // aboutToolStripMenuItem
             // 
-            panel1.BackColor = SystemColors.ControlDark;
-            panel1.Controls.Add(label1);
-            panel1.Location = new Point(12, 814);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(854, 102);
-            panel1.TabIndex = 1;
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(164, 34);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
-            // label1
+            // PlayerPanel
             // 
-            label1.AutoSize = true;
-            label1.ForeColor = SystemColors.ActiveCaptionText;
-            label1.Location = new Point(55, 34);
-            label1.Name = "label1";
-            label1.Size = new Size(74, 25);
-            label1.TabIndex = 0;
-            label1.Text = "Player 1";
+            PlayerPanel.BackColor = SystemColors.ControlDark;
+            PlayerPanel.Controls.Add(textBox1);
+            PlayerPanel.Controls.Add(player1Name);
+            PlayerPanel.Controls.Add(pictureBox2);
+            PlayerPanel.Controls.Add(pictureBox1);
+            PlayerPanel.Controls.Add(whitePieceCounter);
+            PlayerPanel.Controls.Add(blackPieceCounter);
+            PlayerPanel.Location = new Point(12, 814);
+            PlayerPanel.Name = "PlayerPanel";
+            PlayerPanel.Size = new Size(854, 102);
+            PlayerPanel.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            textBox1.Location = new Point(747, 46);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(88, 34);
+            textBox1.TabIndex = 4;
+            textBox1.Text = "Player 2";
+            // 
+            // player1Name
+            // 
+            player1Name.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            player1Name.Location = new Point(18, 46);
+            player1Name.Name = "player1Name";
+            player1Name.Size = new Size(94, 34);
+            player1Name.TabIndex = 4;
+            player1Name.Text = "Player 1";
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+            pictureBox2.Location = new Point(668, 31);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(61, 58);
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.TabIndex = 3;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(128, 31);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(61, 58);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 2;
+            pictureBox1.TabStop = false;
+            // 
+            // whitePieceCounter
+            // 
+            whitePieceCounter.AutoSize = true;
+            whitePieceCounter.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            whitePieceCounter.ForeColor = SystemColors.ActiveCaptionText;
+            whitePieceCounter.Location = new Point(609, 41);
+            whitePieceCounter.Name = "whitePieceCounter";
+            whitePieceCounter.Size = new Size(53, 38);
+            whitePieceCounter.TabIndex = 1;
+            whitePieceCounter.Text = "x 2";
+            // 
+            // blackPieceCounter
+            // 
+            blackPieceCounter.AutoSize = true;
+            blackPieceCounter.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            blackPieceCounter.ForeColor = SystemColors.ActiveCaptionText;
+            blackPieceCounter.Location = new Point(195, 41);
+            blackPieceCounter.Name = "blackPieceCounter";
+            blackPieceCounter.Size = new Size(53, 38);
+            blackPieceCounter.TabIndex = 1;
+            blackPieceCounter.Text = "x 2";
+            // 
+            // fileSystemWatcher1
+            // 
+            fileSystemWatcher1.EnableRaisingEvents = true;
+            fileSystemWatcher1.SynchronizingObject = this;
             // 
             // GameBoardForm
             // 
@@ -129,32 +205,44 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Desktop;
             ClientSize = new Size(878, 928);
-            Controls.Add(panel1);
-            Controls.Add(menuStrip1);
+            Controls.Add(PlayerPanel);
+            Controls.Add(menuStrip);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = menuStrip;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "GameBoardForm";
             Text = "O'Neillo";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            PlayerPanel.ResumeLayout(false);
+            PlayerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStrip;
         private ToolStripMenuItem menuToolStripMenuItem;
         private ToolStripMenuItem optionsToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem saveGameToolStripMenuItem;
-        private ToolStripMenuItem restartToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem1;
-        private ToolStripMenuItem informationPanelToolStripMenuItem;
         private ToolStripMenuItem gameToSpeechToolStripMenuItem;
-        private Panel panel1;
-        private Label label1;
+        private Panel PlayerPanel;
+        private Label blackPieceCounter;
+        private Label whitePieceCounter;
+        private FileSystemWatcher fileSystemWatcher1;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem informationPanelToolStripMenuItem;
+        private TextBox textBox1;
+        private TextBox player1Name;
     }
 }
