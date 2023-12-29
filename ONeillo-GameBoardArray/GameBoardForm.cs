@@ -1,6 +1,12 @@
 using GameboardGUI;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Drawing2D;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
+using System.Text.Json;
+using System.Windows.Forms;
+using System.Speech.Synthesis;
+
 
 namespace ONeillo_GameBoardArray
 {
@@ -10,9 +16,10 @@ namespace ONeillo_GameBoardArray
         const int num_BoardRows = 8; // sets board rows to 8
         const int num_BoardColumns = 8; // sets board columns to 8
         const int BlankPiece = 10; // constant for empty squares 
-        const int WhitePiece = 1;
-        const int BlackPiece = 0;
+        const int WhitePiece = 1; // white pieces = 1 because thats what the png is named
+        const int BlackPiece = 0; // black = 0 because ^
 
+        bool gamestarted = false;
 
         int currentPlayer = BlackPiece;
         int oppositePlayer = WhitePiece;
@@ -71,44 +78,69 @@ namespace ONeillo_GameBoardArray
 
             return boardArray;
         }
-        
+
         // swaps the player each time a move is made
         private void SwapPlayPieces()
         {
+
             int temp = currentPlayer;
             currentPlayer = oppositePlayer;
             oppositePlayer = temp;
+
+            // moves the current player indicator 
+            if (currentPlayer == 0)
+            {
+                currentPlayerInd.Location = new Point(18, 0);
+            }
+            else
+            {
+                currentPlayerInd.Location = new Point(689, 0);
+            }
+
         }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="sender"></param>
-      /// <param name="e"></param>
-        private void GameTileClicked(object sender, EventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void GameTileClicked(object sender, EventArgs e)
         {
             int clickedRow = _gameBoardGui.GetCurrentRowIndex(sender);
             int clickedColumn = _gameBoardGui.GetCurrentColumnIndex(sender);
+
+            // stops players from changing their in-game name after the game has started (if gamestarted = true then)
+            if (!gamestarted)
+            {
+                gamestarted = true;
+                player1NameBox.ReadOnly = true;
+                player2NameBox.ReadOnly = true;
+            }
 
 
             if (ValidMove(clickedRow, clickedColumn, currentPlayer, oppositePlayer))
             {
                 gameBoardData[clickedRow, clickedColumn] = currentPlayer; // applies the move 
                 FlipPieces(clickedRow, clickedColumn, currentPlayer, oppositePlayer); // flips pieces 
-                _gameBoardGui.UpdateBoardGui(gameBoardData);
-                SwapPlayPieces();
+                _gameBoardGui.UpdateBoardGui(gameBoardData); // updates gui 
+                SwapPlayPieces(); // calls swap method 
+
+                if (gameToSpeechToolStripMenuItem.Checked) // when the menu item is checked the pieces will be spoken and placed asynchronously
+                {
+                    SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+                    string gameState = GetGameState();
+                    await Task.Run(() => synthesizer.SpeakAsync(gameState)); 
+                }
             }
-            /*
             else
             {
-                MessageBox.Show("Invalid move: tile occupied");
+                MessageBox.Show("Invalid Move, try again"); // displays when an invalid move is made during gameplay
             }
-            */
 
             // shows the number of black pieces on the gui panel
             int blackPieces = 0;
 
-            for (int row = 0; row < 8; row++) 
+            for (int row = 0; row < 8; row++)
             {
                 for (int col = 0; col < 8; col++)
                 {
@@ -136,9 +168,27 @@ namespace ONeillo_GameBoardArray
             }
 
 
+            if (HasValidMovesLeft(currentPlayer, oppositePlayer) == false)
+            {
+                MessageBox.Show("No Valid Moves left.");
 
+                if (currentPlayer == 1)
+                {
+                    currentPlayer = 0;
+                    oppositePlayer = 1;
+                    currentPlayerInd.Location = new Point(689, 0);
+                }
+
+                else
+                {
+                    currentPlayer = 1;
+                    oppositePlayer = 0;
+                    currentPlayerInd.Location = new Point(18, 0);
+                }
+            }
 
         }
+
 
         /// <summary>
         /// function for the game logic -
@@ -160,6 +210,8 @@ namespace ONeillo_GameBoardArray
                 MessageBox.Show("Invalid Move: Tile Occupied");
                 return false;
             }
+
+
             // these will be used to check the directions (incl diagonals) 
             int[] checkRows = { -1, -1, -1, 0, 0, 1, 1, 1 };
             int[] checkHorizontal = { -1, 0, 1, -1, 1, -1, 0, 1 };
@@ -180,18 +232,37 @@ namespace ONeillo_GameBoardArray
                             return true; // the move is valid 
                         }
                     }
+
                     else if (gameBoardData[r, c] == BlankPiece || gameBoardData[r, c] == currentPlayer) // breaks if 
                     {
+
                         break;
+
                     }
                 }
 
             }
 
-            MessageBox.Show("Invalid Move");
             return false;
         }
 
+        private bool HasValidMovesLeft(int currentPlayer, int oppositePlayer)
+        {
+            for (int row = 0; row < num_BoardRows; row++)
+            {
+                for (int col = 0; col < num_BoardColumns; col++)
+                {
+                    if (gameBoardData[row, col] == 10)
+                    {
+                        if (ValidMove(row, col, currentPlayer, oppositePlayer) == true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false; // No valid moves left
+        }
 
         /// <summary>
         /// 
@@ -241,9 +312,6 @@ namespace ONeillo_GameBoardArray
         }
 
 
-        
-
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About about = new About();
@@ -255,11 +323,87 @@ namespace ONeillo_GameBoardArray
         {
             gameBoardData = this.CreateBoardArray();
             _gameBoardGui.UpdateBoardGui(gameBoardData);
+
+            gamestarted = false; // sets this back to false as its a new game so the game has not started yet
+
+            // resets the name boxes and allows players to change names again
+            player1NameBox.Text = "Player 1";
+            player2NameBox.Text = "Player 2";
+            player1NameBox.ReadOnly = false;
+            player2NameBox.ReadOnly = false;
         }
 
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void informationPanelToolStripMenuItem_Click(object sender, EventArgs e) 
+        {
+            if (informationPanelToolStripMenuItem.Checked == false) // it is checked by default so if it is clicked then the panel and player indicator are not visable 
+            {
+                PlayerPanel.Visible = false;
+                currentPlayerInd.Visible = false;
+
+            }
+            else
+            {
+                PlayerPanel.Visible = true;
+                currentPlayerInd.Visible = true;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private string GetGameState() // turns gameBoardArray into a string to be spoken by iterating over the board and speaking the pievces and their positions
+        {
+            // implementation to generate game state text for text to speech fnction
+            string gameState = "Current game state: \n";
+
+            for (int row = 0; row < num_BoardRows; row++)
+            {
+                for (int col = 0; col < num_BoardColumns; col++)
+                {
+                    if (gameBoardData[row, col] != BlankPiece)
+                    {
+                        gameState += $"Row {row},Column {col}: ";
+
+                        if (gameBoardData[row, col] == BlackPiece)
+                        {
+                            gameState += "Black Piece \n";
+                        }
+                        else if (gameBoardData[row, col] == WhitePiece)
+                        {
+                            gameState += "White Piece \n";
+                        }
+                    }
+                }
+            }
+
+            return gameState;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gameToSpeechToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (gameToSpeechToolStripMenuItem.Checked == true)
+            {
+                SpeechSynthesizer synthesizer = new SpeechSynthesizer(); // creates synthesizer 
+                string gameState = GetGameState(); //gets the game state into a string which can be spoken using the GetGameState function
+                synthesizer.Speak(gameState);// speaks
+            }
+ 
         }
     }
 }

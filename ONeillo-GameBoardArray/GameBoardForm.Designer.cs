@@ -39,8 +39,9 @@
             helpToolStripMenuItem1 = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             PlayerPanel = new Panel();
-            textBox1 = new TextBox();
-            player1Name = new TextBox();
+            currentPlayerInd = new Label();
+            player2NameBox = new TextBox();
+            player1NameBox = new TextBox();
             pictureBox2 = new PictureBox();
             pictureBox1 = new PictureBox();
             whitePieceCounter = new Label();
@@ -93,15 +94,21 @@
             // 
             // informationPanelToolStripMenuItem
             // 
+            informationPanelToolStripMenuItem.Checked = true;
+            informationPanelToolStripMenuItem.CheckOnClick = true;
+            informationPanelToolStripMenuItem.CheckState = CheckState.Checked;
             informationPanelToolStripMenuItem.Name = "informationPanelToolStripMenuItem";
-            informationPanelToolStripMenuItem.Size = new Size(254, 34);
+            informationPanelToolStripMenuItem.Size = new Size(270, 34);
             informationPanelToolStripMenuItem.Text = "Information Panel";
+            informationPanelToolStripMenuItem.Click += informationPanelToolStripMenuItem_Click;
             // 
             // gameToSpeechToolStripMenuItem
             // 
+            gameToSpeechToolStripMenuItem.CheckOnClick = true;
             gameToSpeechToolStripMenuItem.Name = "gameToSpeechToolStripMenuItem";
-            gameToSpeechToolStripMenuItem.Size = new Size(254, 34);
+            gameToSpeechToolStripMenuItem.Size = new Size(270, 34);
             gameToSpeechToolStripMenuItem.Text = "Game-To-Speech";
+            gameToSpeechToolStripMenuItem.Click += gameToSpeechToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem1
             // 
@@ -120,8 +127,9 @@
             // PlayerPanel
             // 
             PlayerPanel.BackColor = SystemColors.ControlDark;
-            PlayerPanel.Controls.Add(textBox1);
-            PlayerPanel.Controls.Add(player1Name);
+            PlayerPanel.Controls.Add(currentPlayerInd);
+            PlayerPanel.Controls.Add(player2NameBox);
+            PlayerPanel.Controls.Add(player1NameBox);
             PlayerPanel.Controls.Add(pictureBox2);
             PlayerPanel.Controls.Add(pictureBox1);
             PlayerPanel.Controls.Add(whitePieceCounter);
@@ -131,23 +139,34 @@
             PlayerPanel.Size = new Size(854, 102);
             PlayerPanel.TabIndex = 1;
             // 
-            // textBox1
+            // currentPlayerInd
             // 
-            textBox1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(747, 46);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(88, 34);
-            textBox1.TabIndex = 4;
-            textBox1.Text = "Player 2";
+            currentPlayerInd.AutoSize = true;
+            currentPlayerInd.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            currentPlayerInd.ForeColor = Color.Green;
+            currentPlayerInd.Location = new Point(18, 0);
+            currentPlayerInd.Name = "currentPlayerInd";
+            currentPlayerInd.Size = new Size(154, 28);
+            currentPlayerInd.TabIndex = 5;
+            currentPlayerInd.Text = "Current Player:";
             // 
-            // player1Name
+            // player2NameBox
             // 
-            player1Name.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            player1Name.Location = new Point(18, 46);
-            player1Name.Name = "player1Name";
-            player1Name.Size = new Size(94, 34);
-            player1Name.TabIndex = 4;
-            player1Name.Text = "Player 1";
+            player2NameBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            player2NameBox.Location = new Point(747, 46);
+            player2NameBox.Name = "player2NameBox";
+            player2NameBox.Size = new Size(88, 34);
+            player2NameBox.TabIndex = 4;
+            player2NameBox.Text = "Player 2";
+            // 
+            // player1NameBox
+            // 
+            player1NameBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            player1NameBox.Location = new Point(18, 46);
+            player1NameBox.Name = "player1NameBox";
+            player1NameBox.Size = new Size(94, 34);
+            player1NameBox.TabIndex = 4;
+            player1NameBox.Text = "Player 1";
             // 
             // pictureBox2
             // 
@@ -242,7 +261,8 @@
         private PictureBox pictureBox2;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem informationPanelToolStripMenuItem;
-        private TextBox textBox1;
-        private TextBox player1Name;
+        private TextBox player2NameBox;
+        private TextBox player1NameBox;
+        private Label currentPlayerInd;
     }
 }
