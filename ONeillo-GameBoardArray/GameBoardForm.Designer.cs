@@ -47,6 +47,7 @@
             whitePieceCounter = new Label();
             blackPieceCounter = new Label();
             fileSystemWatcher1 = new FileSystemWatcher();
+            restoreGameToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             PlayerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -66,7 +67,7 @@
             // 
             // menuToolStripMenuItem
             // 
-            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, saveGameToolStripMenuItem });
+            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveGameToolStripMenuItem, newToolStripMenuItem, restoreGameToolStripMenuItem });
             menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             menuToolStripMenuItem.Size = new Size(74, 29);
             menuToolStripMenuItem.Text = "Game";
@@ -74,14 +75,14 @@
             // newToolStripMenuItem
             // 
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(207, 34);
+            newToolStripMenuItem.Size = new Size(270, 34);
             newToolStripMenuItem.Text = "New Game";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // saveGameToolStripMenuItem
             // 
             saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            saveGameToolStripMenuItem.Size = new Size(207, 34);
+            saveGameToolStripMenuItem.Size = new Size(270, 34);
             saveGameToolStripMenuItem.Text = "Save Game ";
             saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
             // 
@@ -218,6 +219,13 @@
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
             // 
+            // restoreGameToolStripMenuItem
+            // 
+            restoreGameToolStripMenuItem.Name = "restoreGameToolStripMenuItem";
+            restoreGameToolStripMenuItem.Size = new Size(270, 34);
+            restoreGameToolStripMenuItem.Text = "Restore Game";
+            restoreGameToolStripMenuItem.Click += restoreGameToolStripMenuItem_Click;
+            // 
             // GameBoardForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -264,5 +272,6 @@
         private TextBox player2NameBox;
         private TextBox player1NameBox;
         private Label currentPlayerInd;
+        private ToolStripMenuItem restoreGameToolStripMenuItem;
     }
 }

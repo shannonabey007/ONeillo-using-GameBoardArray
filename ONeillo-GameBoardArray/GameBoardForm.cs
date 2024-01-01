@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Text.Json;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
+using Newtonsoft.Json;
 
 
 namespace ONeillo_GameBoardArray
@@ -129,7 +130,7 @@ namespace ONeillo_GameBoardArray
                 {
                     SpeechSynthesizer synthesizer = new SpeechSynthesizer();
                     string gameState = GetGameState();
-                    await Task.Run(() => synthesizer.SpeakAsync(gameState)); 
+                    await Task.Run(() => synthesizer.SpeakAsync(gameState));
                 }
             }
             else
@@ -331,10 +332,38 @@ namespace ONeillo_GameBoardArray
             player2NameBox.Text = "Player 2";
             player1NameBox.ReadOnly = false;
             player2NameBox.ReadOnly = false;
+
         }
 
+        /// <summary>
+        /// this method allows the game data to be saved to the file game_data.json in the same directory as the program is running in.
+        /// This is done when the "Save Game" menu item is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string serializedGameData = JsonConvert.SerializeObject(gameBoardData);
+            string saveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "game_data.json");
+
+            System.IO.File.WriteAllText(saveGamePath, serializedGameData);
+
+            MessageBox.Show("Game saved!");
+
+        }
+
+        /// <summary>
+        /// Click restore game menu item to restore a saved game from the game_data.json file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void restoreGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string readGameData = System.IO.File.ReadAllText("game_data.json");
+            gameBoardData = JsonConvert.DeserializeObject<int[,]>(readGameData);
+            _gameBoardGui.UpdateBoardGui(gameBoardData);
+
+            MessageBox.Show("Game restored!");
 
         }
 
@@ -343,7 +372,7 @@ namespace ONeillo_GameBoardArray
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void informationPanelToolStripMenuItem_Click(object sender, EventArgs e) 
+        private void informationPanelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (informationPanelToolStripMenuItem.Checked == false) // it is checked by default so if it is clicked then the panel and player indicator are not visable 
             {
@@ -403,8 +432,9 @@ namespace ONeillo_GameBoardArray
                 string gameState = GetGameState(); //gets the game state into a string which can be spoken using the GetGameState function
                 synthesizer.Speak(gameState);// speaks
             }
- 
+
         }
+
     }
 }
 
