@@ -31,8 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoardForm));
             menuStrip = new MenuStrip();
             menuToolStripMenuItem = new ToolStripMenuItem();
-            newToolStripMenuItem = new ToolStripMenuItem();
             saveGameToolStripMenuItem = new ToolStripMenuItem();
+            newGameToolStripMenuItem = new ToolStripMenuItem();
+            restoreGameToolStripMenuItem = new ToolStripMenuItem();
             optionsToolStripMenuItem = new ToolStripMenuItem();
             informationPanelToolStripMenuItem = new ToolStripMenuItem();
             gameToSpeechToolStripMenuItem = new ToolStripMenuItem();
@@ -47,7 +48,6 @@
             whitePieceCounter = new Label();
             blackPieceCounter = new Label();
             fileSystemWatcher1 = new FileSystemWatcher();
-            restoreGameToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             PlayerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -67,24 +67,31 @@
             // 
             // menuToolStripMenuItem
             // 
-            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveGameToolStripMenuItem, newToolStripMenuItem, restoreGameToolStripMenuItem });
+            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveGameToolStripMenuItem, newGameToolStripMenuItem, restoreGameToolStripMenuItem });
             menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             menuToolStripMenuItem.Size = new Size(74, 29);
             menuToolStripMenuItem.Text = "Game";
             // 
-            // newToolStripMenuItem
-            // 
-            newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(270, 34);
-            newToolStripMenuItem.Text = "New Game";
-            newToolStripMenuItem.Click += newToolStripMenuItem_Click;
-            // 
             // saveGameToolStripMenuItem
             // 
             saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            saveGameToolStripMenuItem.Size = new Size(270, 34);
+            saveGameToolStripMenuItem.Size = new Size(224, 34);
             saveGameToolStripMenuItem.Text = "Save Game ";
             saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            // 
+            // newGameToolStripMenuItem
+            // 
+            newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
+            newGameToolStripMenuItem.Size = new Size(224, 34);
+            newGameToolStripMenuItem.Text = "New Game";
+            newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
+            // 
+            // restoreGameToolStripMenuItem
+            // 
+            restoreGameToolStripMenuItem.Name = "restoreGameToolStripMenuItem";
+            restoreGameToolStripMenuItem.Size = new Size(224, 34);
+            restoreGameToolStripMenuItem.Text = "Restore Game";
+            restoreGameToolStripMenuItem.Click += restoreGameToolStripMenuItem_Click;
             // 
             // optionsToolStripMenuItem
             // 
@@ -99,7 +106,7 @@
             informationPanelToolStripMenuItem.CheckOnClick = true;
             informationPanelToolStripMenuItem.CheckState = CheckState.Checked;
             informationPanelToolStripMenuItem.Name = "informationPanelToolStripMenuItem";
-            informationPanelToolStripMenuItem.Size = new Size(270, 34);
+            informationPanelToolStripMenuItem.Size = new Size(254, 34);
             informationPanelToolStripMenuItem.Text = "Information Panel";
             informationPanelToolStripMenuItem.Click += informationPanelToolStripMenuItem_Click;
             // 
@@ -107,7 +114,7 @@
             // 
             gameToSpeechToolStripMenuItem.CheckOnClick = true;
             gameToSpeechToolStripMenuItem.Name = "gameToSpeechToolStripMenuItem";
-            gameToSpeechToolStripMenuItem.Size = new Size(270, 34);
+            gameToSpeechToolStripMenuItem.Size = new Size(254, 34);
             gameToSpeechToolStripMenuItem.Text = "Game-To-Speech";
             gameToSpeechToolStripMenuItem.Click += gameToSpeechToolStripMenuItem_Click;
             // 
@@ -158,7 +165,7 @@
             player2NameBox.Name = "player2NameBox";
             player2NameBox.Size = new Size(88, 34);
             player2NameBox.TabIndex = 4;
-            player2NameBox.Text = "Player 2";
+            player2NameBox.Text = "Player #2";
             // 
             // player1NameBox
             // 
@@ -167,7 +174,7 @@
             player1NameBox.Name = "player1NameBox";
             player1NameBox.Size = new Size(94, 34);
             player1NameBox.TabIndex = 4;
-            player1NameBox.Text = "Player 1";
+            player1NameBox.Text = "Player #1";
             // 
             // pictureBox2
             // 
@@ -219,13 +226,6 @@
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // restoreGameToolStripMenuItem
-            // 
-            restoreGameToolStripMenuItem.Name = "restoreGameToolStripMenuItem";
-            restoreGameToolStripMenuItem.Size = new Size(270, 34);
-            restoreGameToolStripMenuItem.Text = "Restore Game";
-            restoreGameToolStripMenuItem.Click += restoreGameToolStripMenuItem_Click;
-            // 
             // GameBoardForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -257,7 +257,7 @@
         private MenuStrip menuStrip;
         private ToolStripMenuItem menuToolStripMenuItem;
         private ToolStripMenuItem optionsToolStripMenuItem;
-        private ToolStripMenuItem newToolStripMenuItem;
+        private ToolStripMenuItem newGameToolStripMenuItem;
         private ToolStripMenuItem saveGameToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem1;
         private ToolStripMenuItem gameToSpeechToolStripMenuItem;
