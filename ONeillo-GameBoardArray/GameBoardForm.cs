@@ -336,21 +336,44 @@ namespace ONeillo_GameBoardArray
         }
 
         /// <summary>
-        /// this method allows the game data to be saved to the file game_data.json in the same directory as the program is running in.
-        /// This is done when the "Save Game" menu item is clicked.
+        /// gets and sets the player names from text boxes as well as game board data 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        public class GameData
+        {
+
+            public string Player1Name { get; set; }
+            public string Player2Name { get; set; }
+            public int[,] GameBoardData { get; set; }
+            public GameData(int[,] gameBoardData, string player1Name, string player2Name)
+            {
+                Player1Name = player1Name;
+                Player2Name = player2Name;
+                GameBoardData = gameBoardData;
+            }
+        }
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string serializedGameData = JsonConvert.SerializeObject(gameBoardData);
             string saveGamePath = Path.Combine(Directory.GetCurrentDirectory(), "game_data.json");
 
-            System.IO.File.WriteAllText(saveGamePath, serializedGameData);
+            try
+            {
+                GameData gameData = new GameData(gameBoardData, player1NameBox.Text, player2NameBox.Text);
 
-            MessageBox.Show("Game saved!");
+                string serializedGameData = JsonConvert.SerializeObject(gameData);
+
+                System.IO.File.WriteAllText(saveGamePath, serializedGameData);
+
+                MessageBox.Show("Game saved!");
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving game: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
 
         }
+
 
         /// <summary>
         /// Click restore game menu item to restore a saved game from the game_data.json file
@@ -360,7 +383,12 @@ namespace ONeillo_GameBoardArray
         private void restoreGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string readGameData = System.IO.File.ReadAllText("game_data.json");
-            gameBoardData = JsonConvert.DeserializeObject<int[,]>(readGameData);
+
+            GameData data = JsonConvert.DeserializeObject<GameData>(readGameData);
+            gameBoardData = data.GameBoardData;
+            player1NameBox.Text = data.Player1Name;
+            player2NameBox.Text = data.Player2Name;
+
             _gameBoardGui.UpdateBoardGui(gameBoardData);
 
             MessageBox.Show("Game restored!");
