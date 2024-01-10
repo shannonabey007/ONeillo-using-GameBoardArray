@@ -410,7 +410,7 @@ namespace ONeillo_GameBoardArray
                 string serializedGameData = JsonConvert.SerializeObject(gameData);
                 System.IO.File.WriteAllText(saveGamePath, serializedGameData);
 
-                gameSaved = true; 
+                gameSaved = true;
 
                 MessageBox.Show("Game saved!");
             }
@@ -473,7 +473,7 @@ namespace ONeillo_GameBoardArray
         /// turns gameBoardArray into a string to be spoken by iterating over the board and speaking the pievces and their positions
         /// </summary>
         /// <returns></returns>
-        private string GetGameState() 
+        private string GetGameState()
         {
             // implementation to generate game state text for text to speech fnction
             string gameState = "Current game state: \n";
@@ -518,6 +518,10 @@ namespace ONeillo_GameBoardArray
 
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
 

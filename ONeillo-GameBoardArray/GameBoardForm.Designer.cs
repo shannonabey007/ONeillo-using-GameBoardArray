@@ -48,6 +48,7 @@
             whitePieceCounter = new Label();
             blackPieceCounter = new Label();
             fileSystemWatcher1 = new FileSystemWatcher();
+            exitToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             PlayerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -58,7 +59,7 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new Size(24, 24);
-            menuStrip.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem1 });
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, optionsToolStripMenuItem, helpToolStripMenuItem1, exitToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Size = new Size(878, 33);
@@ -128,7 +129,7 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(164, 34);
+            aboutToolStripMenuItem.Size = new Size(270, 34);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
@@ -226,6 +227,13 @@
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
             // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(55, 29);
+            exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+            // 
             // GameBoardForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -273,5 +281,6 @@
         private TextBox player1NameBox;
         private Label currentPlayerInd;
         private ToolStripMenuItem restoreGameToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }
