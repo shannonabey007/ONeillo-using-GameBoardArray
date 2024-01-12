@@ -22,6 +22,7 @@ namespace ONeillo_GameBoardArray
 
         bool gamestarted = false;
         bool gameSaved = false;
+        bool gameover = false;
 
         int currentPlayer = BlackPiece;
         int oppositePlayer = WhitePiece;
@@ -109,6 +110,7 @@ namespace ONeillo_GameBoardArray
         /// <summary>
         /// Checks if any of the game tiles on the board have been clicked, if so checks if it is a valid move, otherwise displays error message
         /// also makes it so players cant change their names once gameplay has started 
+        /// checks if there are any valid moves left 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -193,10 +195,25 @@ namespace ONeillo_GameBoardArray
                     oppositePlayer = 0;
                     currentPlayerInd.Location = new Point(18, 0);
                 }
+
+                if(!HasValidMovesLeft(currentPlayer,oppositePlayer) && !HasValidMovesLeft(oppositePlayer, currentPlayer))
+                {
+                    gameover = true;
+                    ShowGameOverMessage(); 
+                }
             }
 
         }
 
+        /// <summary>
+        /// displays the winner by appending the result of the winnercalculator method to the message box
+        /// </summary>
+        private void ShowGameOverMessage()
+        {
+            string winner = WinnerCalculator();
+            MessageBox.Show($"Game Over! {winner}"); 
+           
+        }
 
         /// <summary>
         /// function for the game logic -
@@ -320,6 +337,44 @@ namespace ONeillo_GameBoardArray
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the winner by seeing which player has the most pieces 
+        /// </summary>
+        /// <returns></returns>
+        private string WinnerCalculator()
+        {
+            int numOfBlackPieces = 0;
+            int numOfWhitePieces = 0;
+
+            for (int row = 0; row < num_BoardRows; row++)
+            {
+                for (int col = 0; col < num_BoardColumns; col++)
+                {
+                    if (gameBoardData[row, col] == 0)
+                    {
+                        numOfBlackPieces++;
+                    }
+                    else if (gameBoardData[row, col] == 1)
+                    {
+                        numOfWhitePieces++;
+                    }
+                }
+            }
+
+            if (numOfBlackPieces > numOfWhitePieces)
+            {
+                return player1NameBox.Text + " wins!";
+            }
+            else if (numOfWhitePieces > numOfBlackPieces)
+            {
+                return player2NameBox.Text + " wins!";
+            }
+            else
+            {
+                return "It's a draw!";
             }
         }
 
@@ -520,7 +575,23 @@ namespace ONeillo_GameBoardArray
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (gamestarted && !gameSaved)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save the current game before starting a new one?", "Save Game", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    saveGameToolStripMenuItem_Click(sender, e); // Save the game
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    return; // Cancel the operation if the user selects Cancel
+                }
+
+            }
+
             this.Close();
+
         }
     }
 }
