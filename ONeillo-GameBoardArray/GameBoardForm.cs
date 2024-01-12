@@ -110,7 +110,8 @@ namespace ONeillo_GameBoardArray
         /// <summary>
         /// Checks if any of the game tiles on the board have been clicked, if so checks if it is a valid move, otherwise displays error message
         /// also makes it so players cant change their names once gameplay has started 
-        /// checks if there are any valid moves left 
+        /// displays when no valid moves left 
+        /// displays game over and game winner 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -206,7 +207,7 @@ namespace ONeillo_GameBoardArray
         }
 
         /// <summary>
-        /// displays the winner by appending the result of the winnercalculator method to the message box
+        /// displays the winner by appending the result of the winnercalculation to game over message 
         /// </summary>
         private void ShowGameOverMessage()
         {
