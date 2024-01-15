@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
 using Newtonsoft.Json;
+using static ONeillo_GameBoardArray.GameBoardForm;
 
 
 namespace ONeillo_GameBoardArray
@@ -437,7 +438,6 @@ namespace ONeillo_GameBoardArray
             public string Player2Name { get; set; }
             public int[,] GameBoardData { get; set; }
             public bool SpeechEnabled { get; set; }
-
             public bool ShowingPanel { get; set; }
             public GameData(int[,] gameBoardData, string player1Name, string player2Name, bool speechEnabled, bool showingPanel)
             {
@@ -463,10 +463,10 @@ namespace ONeillo_GameBoardArray
             try
             {
                 GameData gameData = new GameData(gameBoardData, player1NameBox.Text, player2NameBox.Text, gameToSpeechToolStripMenuItem.Checked, informationPanelToolStripMenuItem.Checked);
-                string serializedGameData = JsonConvert.SerializeObject(gameData);
-                System.IO.File.WriteAllText(saveGamePath, serializedGameData);
 
-                gameSaved = true;
+                string serializedGameData = JsonConvert.SerializeObject(gameData);
+
+                System.IO.File.WriteAllText(saveGamePath, serializedGameData);
 
                 MessageBox.Show("Game saved!");
             }
@@ -476,7 +476,6 @@ namespace ONeillo_GameBoardArray
                 MessageBox.Show("Error saving game: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
-
         }
 
 
